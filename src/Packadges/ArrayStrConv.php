@@ -3,7 +3,14 @@ namespace edrard\Packadges;
 
 Class ArrayStrConv
 {
-    public static function construct_string($array, $prepend = '', $sep = '|')
+    /**
+    * Convert array multi array to one level array with complex key
+    * 
+    * @param array $array - array to convert 
+    * @param string $prepend - prepend in front of complex key
+    * @param string $sep - separator betwean keys
+    */
+    public static function construct_string(array $array, $prepend = '', $sep = '|')
     {
         $results = [];
         foreach ($array as $key => $value) {
@@ -15,22 +22,30 @@ Class ArrayStrConv
         }
         return $results;
     }
-    public static function construct_array($array,$t="|"){
+    /**
+    * Convert one level array with complex key to multi level
+    * 
+    * @param mixed $array - array to convert
+    * @param string $prepend - prepend in front of complex key
+    * @param mixed $t - separator
+    */
+    public static function construct_array(array $array, $prepend = '', $t="|"){
         $new = [];
         foreach($array as $key => $val){
+            $key = preg_replace("/^(".$prepend.")/u", "", $key);
             $tmp = explode($t,$key);
             $new[$tmp[0]] = !isset($new[$tmp[0]]) ? [] : $new[$tmp[0]];
-            $new[$tmp[0]] = _reconstruct_array($tmp,$val,$new[$tmp[0]]);
+            $new[$tmp[0]] = self::reconstruct_array($tmp,$val,$new[$tmp[0]]);
         }  
         return $new;  
     }
-    private static function _reconstruct_array($keys,$val,$new){
+    private static function reconstruct_array(array $keys,$val,$new){
         array_shift($keys); 
         if(!empty($keys)){ 
             reset($keys);
             $key = $keys[key($keys)];
             $new[$key] = !isset($new[$key]) ? [] : $new[$key];
-            $new[$key] = _reconstruct_array($keys,$val,$new[$key]);
+            $new[$key] = self::reconstruct_array($keys,$val,$new[$key]);
         }else{
             $new = $val;
         }
