@@ -13,7 +13,7 @@
     },
     "autoload": {
         "psr-4": {
-            "edrard\\Packadges\\ArrayStrConv\\": "src/ArrayStrConv"
+            "edrard\\Packadges\\": "src/Packadges"
         }
     }
 }

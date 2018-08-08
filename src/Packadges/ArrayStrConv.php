@@ -8,7 +8,7 @@ Class ArrayStrConv
         $results = [];
         foreach ($array as $key => $value) {
             if (is_array($value) && ! empty($value)) {
-                $results = array_merge($results, dot($value, $prepend.$key.$sep, $sep));
+                $results = array_merge($results, self::construct_string($value, $prepend.$key.$sep, $sep));
             } else {
                 $results[$prepend.$key] = $value;
             }
