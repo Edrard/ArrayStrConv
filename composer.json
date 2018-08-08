@@ -1,0 +1,19 @@
+{
+    "name": "edrard/Packadges/ArrayStrConv",
+    "description": "Array to String both side converter",
+    "type": "library",
+    "homepage": "https://github.com/Edrard/ArrayStrConv",
+    "license": "MIT",
+    "authors": [{
+        "name": "Edrard",
+        "email": "demonand@gmail.com"
+    }],
+    "require": {
+        "php": ">=5.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "edrard\\Packadges\\ArrayStrConv\\": "src/ArrayStrConv"
+        }
+    }
+}
