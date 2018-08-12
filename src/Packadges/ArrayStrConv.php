@@ -9,10 +9,12 @@ Class ArrayStrConv
     * @param array $array - array to convert 
     * @param string $prepend - prepend in front of complex key
     * @param string $sep - separator betwean keys
+    * @param array $unset - unset deepes keys
     */
-    public static function construct_string(array $array, $prepend = '', $sep = '|')
+    public static function construct_string(array $array, $prepend = '', $sep = '|', $unset = array())
     {
         $results = [];
+        static::unset_deep_keys($array,$unset);
         foreach ($array as $key => $value) {
             if (is_array($value) && ! empty($value)) {
                 $results = array_merge($results, self::construct_string($value, $prepend.$key.$sep, $sep));
@@ -39,6 +41,21 @@ Class ArrayStrConv
         }  
         return $new;  
     }
+    public static function unset_deep_keys(array &$array, array $keys = array()){
+        if(!empty($keys)){
+            if(is_array($array)){
+                foreach ($array as $key => &$value) { 
+                    if (is_array($value)) { 
+                        static::unset_deep_keys($value, $keys); 
+                    } else {
+                        if (in_array($key, $keys)){
+                            unset($array[$key]);
+                        }
+                    } 
+                }
+            }
+        }
+    } 
     private static function reconstruct_array(array $keys,$val,$new){
         array_shift($keys); 
         if(!empty($keys)){ 
