@@ -11,15 +11,27 @@ Class ArrayStrConv
     * @param string $sep - separator betwean keys
     * @param array $unset - unset deepes keys
     */
-    public static function construct_string(array $array, $prepend = '', $sep = '|', $unset = array())
+    public static function construct_string(array $array, $prepend = '', $sep = '|', $unset = array(), $keep_empty = FALSE)
+    {
+        static::unset_deep_keys($array,$unset);
+        return self::_construct_string($array, $prepend, $sep,$keep_empty);
+    }
+
+    private static function _construct_string(array $array, $prepend = '', $sep = '|', $keep_empty = FALSE)
     {
         $results = [];
-        static::unset_deep_keys($array,$unset);
         foreach ($array as $key => $value) {
             if (is_array($value) && ! empty($value)) {
-                $results = array_merge($results, self::construct_string($value, $prepend.$key.$sep, $sep));
+                $results = array_merge($results, self::_construct_string($value, $prepend.$key.$sep, $sep,$keep_empty));
             } else {
-                $results[$prepend.$key] = $value;
+                $results[$prepend.$key] =  $value;
+                if(is_array($value)){     
+                    if($keep_empty !== FALSE ){
+                        $results[$prepend.$key] =  '';
+                    }else{
+                        unset($results[$prepend.$key]);    
+                    }
+                }
             }
         }
         return $results;
