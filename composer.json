@@ -8,7 +8,14 @@
         "name": "Edrard",
         "email": "demonand@gmail.com"
     }],
+    "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/Edrard/function.git"
+        }
+    ],
     "require": {
+        "edrard/function": "dev-master",
         "php": ">=5.4"
     },
     "autoload": {
