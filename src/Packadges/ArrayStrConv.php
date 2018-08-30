@@ -10,6 +10,7 @@ Class ArrayStrConv
     * @param string $prepend - prepend in front of complex key
     * @param string $sep - separator betwean keys
     * @param array $unset - unset deepes keys
+    * @param boolean $keep_empty - keep or not empty array value
     */
     public static function construct_string(array $array, $prepend = '', $sep = '|', $unset = array(), $keep_empty = FALSE)
     {
@@ -54,19 +55,25 @@ Class ArrayStrConv
         return $new;  
     }
     public static function unset_deep_keys(array &$array, array $keys = array()){
+        $mark = FALSE;
         if(!empty($keys)){
             if(is_array($array)){
                 foreach ($array as $key => &$value) { 
                     if (is_array($value)) { 
-                        static::unset_deep_keys($value, $keys); 
+                        if(static::unset_deep_keys($value, $keys) === TRUE && empty($array[$key])){
+                            unset($array[$key]); 
+                            $mark = TRUE;   
+                        } 
                     } else {
                         if (in_array($key, $keys)){
                             unset($array[$key]);
+                            $mark = TRUE;
                         }
                     } 
                 }
             }
         }
+        return $mark;
     } 
     private static function reconstruct_array(array $keys,$val,$new){
         array_shift($keys); 
